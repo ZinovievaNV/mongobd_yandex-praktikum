@@ -11,7 +11,7 @@ module.exports = {
     const { name, about, avatar } = req.body;
     User.create({ name, about, avatar })
       .then((user) => res.send({ data: user }))
-      .catch((error) => res.status(500).send({ message: `Произошла ошибка ${error}` }));
+      .catch((error) => res.status(400).send({ message: `Произошла ошибка ${error}` }));
   },
 
   getUserById(req, res) {

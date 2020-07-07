@@ -5,43 +5,21 @@ module.exports = {
     Card.find({})
       .populate(['owner', 'likes'])
       .then((card) => res.send({ data: card }))
-      .catch((error) => res.status(500).send({ message: `Произошла ошибка ${error}` }));
+      .catch((error) => res.status(500).send({ message: `${error.message}` }));
   },
   createCard(req, res) {
     const { name, link } = req.body;
     // eslint-disable-next-line no-underscore-dangle
     Card.create({ name, link, owner: req.user._id })
       .then((card) => res.send({ data: card }))
-      .catch((error) => res.status(500).send({ message: `Произошла ошибка ${error}` }));
+      .catch((error) => res.status(400).send({ message: `${error.message}` }));
   },
 
   deleteCardById(req, res) {
-    Card.findByIdAndRemove(req.params.cardId)
-      .orFail(new Error('Карточка не найдена'))
+    Card.findOneAndDelete({ _id: req.params.cardId })
+      .orFail(() => Error('Карточка не найдена'))
       .then((card) => res.send({ data: card, message: 'Карточка удалена' }))
-      .catch((error) => res.status(500).send({ message: `${error.message}` }));
+      .catch((error) => res.status(404).send({ message: `${error.message}` }));
   },
 
-  likeCard(req, res) {
-    Card.findByIdAndUpdate(
-      req.params.cardId,
-      // eslint-disable-next-line no-underscore-dangle
-      { $addToSet: { likes: req.user._id } },
-      { new: true },
-    )
-      .orFail(new Error('Карточка не найдена'))
-      .then(() => res.send({ message: 'Карточка like' }))
-      .catch((error) => res.status(500).send({ message: `${error.message}` }));
-  },
-  dislikeCard(req, res) {
-    Card.findByIdAndUpdate(
-      req.params.cardId,
-      // eslint-disable-next-line no-underscore-dangle
-      { $pull: { likes: req.user._id } },
-      { new: true },
-    )
-      .orFail(new Error('Карточка не найдена'))
-      .then(() => res.send({ message: 'Карточка dislike' }))
-      .catch((error) => res.status(500).send({ message: `${error.message}` }));
-  },
 };
