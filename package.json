@@ -1,6 +1,6 @@
 {
   "name": "sprint13_mongobd",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "API.REST.Проект с базой данных MongoDB",
   "main": "app.js",
   "scripts": {

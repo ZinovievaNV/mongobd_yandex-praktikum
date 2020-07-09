@@ -11,7 +11,6 @@ const cardSchema = new mongoose.Schema({
   link: {
     validate: {
       validator(v) {
-        // eslint-disable-next-line
         return validator.isURL(v);
       },
       message: 'Введите ссылку!',
@@ -29,7 +28,7 @@ const cardSchema = new mongoose.Schema({
     ref: 'user',
     default: [],
   }],
-  createdAd: {
+  createdAt: {
     type: Date,
     default: Date.now,
   },
